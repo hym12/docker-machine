@@ -35,7 +35,7 @@ web.1:
     - /mnt/docker/confs/phpfpm:/etc/php-fpm.d/
     - /mnt/docker/confs/phpfpm/php.ini:/etc/php.ini
   ports:
-    - "8081"
+    - "8081:80"
   links:
     - db.1
 web.2:
@@ -47,6 +47,6 @@ web.2:
     - /mnt/docker/confs/phpfpm:/etc/php-fpm.d/
     - /mnt/docker/confs/phpfpm/php.ini:/etc/php.ini
   ports:
-    - "8082"
+    - "8082:80"
   links:
     - db.2
