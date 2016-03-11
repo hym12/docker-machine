@@ -11,6 +11,10 @@ Vagrant.configure(2) do |config|
     v.memory = CONF["ram"]
     v.cpus = CONF["cpus"]
   end
+  config.vm.provider "vmware_fusion" do |v|
+    v.vmx["memsize"] = CONF["ram"]
+    v.vmx["numvcpus"] = CONF["cpus"]
+  end
   config.vm.synced_folder ".", "/mnt/docker", type: "nfs", mount_options: ['rw', 'vers=3', 'tcp', 'fsc', 'actimeo=2']
 
   if Vagrant.has_plugin?("HostManager")
