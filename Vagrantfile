@@ -3,7 +3,6 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.ssh.insert_key = false
-  config.ssh.pty = true
   config.vm.network "private_network", ip: "10.0.0.10"
   config.vm.provider "virtualbox" do |v|
     v.memory = 4096
