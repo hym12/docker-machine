@@ -9,7 +9,7 @@ Please check http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-t
 
 ##Setup
 
-First of all download and install [Docker Toolbox](https://https://www.docker.com/products/docker-toolbox) and [Vagrant](https://www.vagrantup.com/downloads.html)
+First of all download and install [Docker Toolbox](https://www.docker.com/products/docker-toolbox) and [Vagrant](https://www.vagrantup.com/downloads.html)
 
 ```
   - Open Vagrantfile
