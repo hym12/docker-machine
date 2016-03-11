@@ -13,7 +13,8 @@ First of all download and install [Docker Toolbox](https://www.docker.com/produc
 
 ```
   - Open Vagrantfile
-  - set your preferred vbox name instance, private_network IP, synced folder options and RAM size (Remember you have to provide enough memory for your containers)
+  - copy vagrantfile.dist.yml to vagrantfile.yml 
+  - set your preferred private_network IP, cpus and RAM size in it(Remember you have to provide enough memory for your containers)
   - vagrant up
   - once the VM is up, open 'docker_create' file
   - set "generic-ip-address" with Vagrantfile private_ip and change "default" if you had set up vagrant machine name
