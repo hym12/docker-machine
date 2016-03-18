@@ -1,3 +1,8 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'yaml'
+
+# Load up our vagrant config files -- vagrantconfig.yml first
 _config = YAML.load(File.open(File.join(File.dirname(__FILE__), "vagrantconfig.yml"), File::RDONLY).read)
 CONF = _config
 
