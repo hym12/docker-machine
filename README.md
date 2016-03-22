@@ -1,31 +1,71 @@
 # Docker & Vagrant synergy
 ---
 
-In Ideato we are developing software using OSX so we had to find a solution about no native support for Docker.
+In [Ideato](https://www.ideato.com) we are developing software using OSX so we had to find a solution about no native support for Docker.
 Instead launching one Vagrant machine for each container (using vm.provider : docker) we recommend to host inside a Vagrant machine a fully working Docker Machine hosting our containers.
-You would wonder why...We can reuse Docker images inside the single Vagrant machine and speed up our environment setup
-Please check http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-together/
+You would wonder why...We can reuse Docker images inside the single Vagrant machine and speed up our environment setup.
 
+For this work we inspired from [Scott Lowe blog post](http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-together/)
+
+##Requirements
+###Vagrant
+A Vagrant version is required because we will use it to share contents via NFS. Please check out [Vagrant Downloads](https://www.vagrantup.com/downloads.html).
+
+###Docker Toolbox
+The [Docker Toolbox](https://www.docker.com/products/docker-toolbox) installs everything you need to get started with Docker on Mac OS X, Linux and Windows. It includes the Docker client, Compose, Machine, Kitematic, and VirtualBox.
+
+**NOTE** You can de-select Kinematic from Docker Toolbox installer, it's not stricted required 
 
 ##Setup
 
-First of all download and install [Docker Toolbox](https://www.docker.com/products/docker-toolbox) and [Vagrant](https://www.vagrantup.com/downloads.html)
+* Copy `vagrantconfig.dist.yml` in `vagrantconfig.yml`
+* Open `vagrantconfig.yml` with your favourite editor. Here you can customize values for vCPUs number, RAM amount, private IP address. 
+**Warning:** you have to provide enough memory for your containers.
+* Open a command shell or terminal window and launch 
 
 ```
-  - Open Vagrantfile
-  - copy vagrantfile.dist.yml to vagrantfile.yml 
-  - set your preferred private_network IP, cpus and RAM size in it(Remember you have to provide enough memory for your containers)
-  - vagrant up
-  - once the VM is up, open 'docker_create' file
-  - set "generic-ip-address" with Vagrantfile private_ip and change "default" if you had set up vagrant machine name
-  - launch it "sh docker_create.sh"
-  - it will install the Docker Machine
-  - launch docker-machine env default
-  - launch eval "$(docker-machine env default)"
-  - in your OSX terminal try to launch 'docker ps', 'docker-machine ssh' or 'vagrant ssh'
-  - test it with 'docker run -it busybox /bin/bash'
+vagrant up
+```
+
+* Once the VM is up we are ready to create the Docker Machine. To create the Docker Machine launch  
+
+```
+sh docker_create.sh
+```
+
+It will install Docker engine inside your VM and inject the default SSH *insecure_private_key* 
+
+* Now you need to tell Docker to talk to the new machine. You can do this with the command
+
+```
+$ docker-machine env default
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://10.0.0.10:2376"
+export DOCKER_CERT_PATH="/Users/paolo/.docker/machine/machines/default"
+export DOCKER_MACHINE_NAME="default"
+# Run this command to configure your shell:
+# eval $(docker-machine env default)
+```
+
+* Connect your current shell environment to the new machine as the last output line
+
+```
+eval "$(docker-machine env default)"
+```
+This sets environment variables for the current shell that the Docker client will read which specify the TLS settings. You need to do this each time you open a new shell or restart your machine.
+
+* Now you can try to launch normal docker command on your host. Test it!
+
+```
+docker run -it busybox /bin/sh
+```
+
+```
   - try Docker Compose! open docker-compose.yml and launch docker-compose up -d
 ```
+
+###**VMware Fusion users
+###**Virtualbox users
 
 ##Install a Symfony Environment
 
