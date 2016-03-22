@@ -22,12 +22,5 @@ Vagrant.configure(2) do |config|
     v.vmx["memsize"] = CONF["ram"]
     v.vmx["numvcpus"] = CONF["cpus"]
   end
-  config.vm.synced_folder ".", "/mnt/docker", type: "nfs", mount_options: ['rw', 'vers=3', 'tcp', 'fsc', 'actimeo=2']
-
-  if Vagrant.has_plugin?("HostManager")
-    config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-    config.hostmanager.ignore_private_ip = false
-    config.hostmanager.include_offline = true
-  end
+  config.vm.synced_folder ".", "/mnt/docker", type: "nfs", mount_options: ['rw', 'vers=3', 'tcp', 'fsc', 'actimeo=1']
 end
