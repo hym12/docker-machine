@@ -9,15 +9,16 @@ CONF = _config
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
   config.ssh.insert_key = false
   config.vm.box_check_update = false
   config.vm.network "private_network", ip: CONF["ipaddress"]
   config.vm.provider "virtualbox" do |v|
+    config.vm.box = "ubuntu/trusty64"
     v.memory = CONF["ram"]
     v.cpus = CONF["cpus"]
   end
   config.vm.provider "vmware_fusion" do |v|
+    config.vm.box = "puphpet/ubuntu1404-x64"
     v.vmx["memsize"] = CONF["ram"]
     v.vmx["numvcpus"] = CONF["cpus"]
   end
