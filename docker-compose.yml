@@ -1,31 +1,3 @@
-db.1:
-  container_name: db.1
-  image: mysql:5.6
-  volumes:
-    - /var/lib/mysql.1:/var/lib/mysql
-  ports:
-    - "3306:3306"
-  environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-db.2:
-  container_name: db.2
-  image: mysql:5.6
-  volumes:
-    - /var/lib/mysql.2:/var/lib/mysql
-  ports:
-    - "3307:3306"
-  environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-ha.1:
-  container_name: ha.1
-  image: haproxy:1.5
-  volumes:
-    - /mnt/docker/confs/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-  ports:
-    - "80:80"
-  links:
-    - web.1
-    - web.2
 web.1:
   container_name: web.1
   image: ideato/nginx-phpfpm:5.6
@@ -38,15 +10,12 @@ web.1:
     - "8081:80"
   links:
     - db.1
-web.2:
-  container_name: web.2
-  image: ideato/nginx-phpfpm:5.6
+db.1:
+  container_name: db.1
+  image: mysql:5.6
   volumes:
-    - /mnt/docker/htdocs/example2.it:/var/www/vhosts/example2.it
-    - /mnt/docker/confs/nginx/vhosts/example2.conf:/etc/nginx/conf.d/default.conf
-    - /mnt/docker/confs/phpfpm:/etc/php-fpm.d/
-    - /mnt/docker/confs/phpfpm/php.ini:/etc/php.ini
+    - /var/lib/mysql.1:/var/lib/mysql
   ports:
-    - "8082:80"
-  links:
-    - db.2
+    - "3306:3306"
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
