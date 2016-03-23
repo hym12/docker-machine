@@ -1,5 +1,4 @@
 # Docker & Vagrant synergy
----
 
 In [Ideato](https://www.ideato.com) we are developing software using OSX so we had to find a solution about no native support for Docker.
 Instead launching one Vagrant machine for each container (using vm.provider : docker) we recommend to host inside a Vagrant machine a fully working Docker Machine hosting our containers.
@@ -14,26 +13,34 @@ A Vagrant version is required because we will use it to share contents via NFS. 
 ###Docker Toolbox
 The [Docker Toolbox](https://www.docker.com/products/docker-toolbox) installs everything you need to get started with Docker on Mac OS X, Linux and Windows. It includes the Docker client, Compose, Machine, Kitematic, and VirtualBox.
 
-**NOTE** You can de-select Kinematic from Docker Toolbox installer, it's not stricted required 
+**NOTE** You can de-select Kinematic from Docker Toolbox installer, it's not stricted required. If you have already Virtuabox installed, the installer will skip 
 
 ##Setup
 
 * Copy `vagrantconfig.dist.yml` in `vagrantconfig.yml`
 * Open `vagrantconfig.yml` with your favourite editor. Here you can customize values for vCPUs number, RAM amount, private IP address. 
-**Warning:** you have to provide enough memory for your containers.
+**Warning:** you have to provide enough memory for your containers; you can start with **at least** 2GB, but 4GB is recommended
 * Open a command shell or terminal window and launch 
 
 ```
 vagrant up
 ```
 
-* Once the VM is up we are ready to create the Docker Machine. To create the Docker Machine launch  
+* Once the VM is up we are ready to create the Docker Machine. To create the Docker Machine launch 
+
+###Virtualbox default Vagrant provider
 
 ```
-sh docker_create.sh
+sh docker_create_vbox.sh
 ```
 
-It will install Docker engine inside your VM and inject the default SSH *insecure_private_key* 
+###VMware Fusion Vagrant provider
+
+```
+sh docker_create_vmware.sh
+```
+
+It will install Docker engine inside your VM and inject the default Vagrant SSH *insecure_private_key* 
 
 * Now you need to tell Docker to talk to the new machine. You can do this with the command
 
@@ -41,7 +48,7 @@ It will install Docker engine inside your VM and inject the default SSH *insecur
 $ docker-machine env default
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://10.0.0.10:2376"
-export DOCKER_CERT_PATH="/Users/paolo/.docker/machine/machines/default"
+export DOCKER_CERT_PATH="/Users/ideato/.docker/machine/machines/default"
 export DOCKER_MACHINE_NAME="default"
 # Run this command to configure your shell:
 # eval $(docker-machine env default)
@@ -52,25 +59,34 @@ export DOCKER_MACHINE_NAME="default"
 ```
 eval "$(docker-machine env default)"
 ```
-This sets environment variables for the current shell that the Docker client will read which specify the TLS settings. You need to do this each time you open a new shell or restart your machine.
+This sets environment variables for the current shell that the Docker client will read which specify the TLS settings. You need to do this each time you open a new shell or restart your machine. You can add this line into your `.bashrc` every time you launch a new shell
 
-* Now you can try to launch normal docker command on your host. Test it!
+```
+# For docker-machine
+eval "$(docker-machine env default)"
+```
+* You can test the environment to launch normal docker command on your host. Let's do it!
 
 ```
 docker run -it busybox /bin/sh
 ```
 
-```
-  - try Docker Compose! open docker-compose.yml and launch docker-compose up -d
-```
+Please read for further informations please read [Docker Machine](https://docs.docker.com/machine/) page
 
-###**VMware Fusion users
-###**Virtualbox users
+##Build our stack
+
+Now we are ready to build our stack to host our Symfony dev environment with Docker Compose
+
+```
+$ docker-compose up -d
+```
+By default docker-compose command takes by default `docker-compose.yml` and start related containers. With `-f` switch we can specify custom docker-compose YAML
 
 ##Install a Symfony Environment
 
+* Complete Setup section
+
 ```
-  - complete Setup section
   - docker-compose up -d
   - launch from your OSX terminal:
 	- docker exec -it web.1 sh -c 'curl -sS https://getcomposer.org/installer | php'
