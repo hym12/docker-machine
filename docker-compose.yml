@@ -7,7 +7,7 @@ web.1:
     - /mnt/docker/confs/phpfpm:/etc/php-fpm.d/
     - /mnt/docker/confs/phpfpm/php.ini:/etc/php.ini
   ports:
-    - "8081:80"
+    - "80:8081"
   links:
     - db.1
 db.1:
