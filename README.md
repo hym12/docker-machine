@@ -34,12 +34,6 @@ vagrant up
 sh docker_create_vbox.sh
 ```
 
-###VMware Fusion Vagrant provider
-
-```
-sh docker_create_vmware.sh
-```
-
 It will install Docker engine inside your VM and inject the default Vagrant SSH *insecure_private_key* 
 
 * Now you need to tell Docker to talk to the new machine. You can do this with the command
@@ -73,23 +67,48 @@ docker run -it busybox /bin/sh
 
 Please read for further informations please read [Docker Machine](https://docs.docker.com/machine/) page
 
-##Build our stack
+###Docker machine and VMware Fusion 
+If you have a commercial copy of VMware Fusion we can use a different approach, you **don't need anymore Vagrant!** Run the script
 
-Now we are ready to build our stack to host our Symfony dev environment with Docker Compose
+```
+sh docker_create_fusion.sh
+```
+
+It will create a Docker machine and share via NFS your current workspace directory inside virtual machine
+
+Thanks to great [Julien Blog](http://julien.lirochon.net/up-and-running-docker-host-with-vmware-fusion-and-docker-machine.html) post for the helpers functions
+
+##Build your stack
+
+Now we are ready to build our stack to host Symfony dev environment with Docker Compose
+
 
 ```
 $ docker-compose up -d
 ```
 By default docker-compose command takes by default `docker-compose.yml` and start related containers. With `-f` switch we can specify custom docker-compose YAML
 
+In the `docker-compose-examples` folder there's some docker-compose files with different stacks. For example:
+
+```
+docker-compose -f docker-compose.lemp-es.yml up -d
+```
+
+It will bootstrap a LEMP (Nginx, MySQL, PHP) with ES (Elasticsearch)
+
 ##Install a Symfony Environment
 
 * Complete Setup section
+* From your terminal launch
 
 ```
-  - docker-compose up -d
-  - launch from your OSX terminal:
+$ docker-compose up -d 
+```
+
+* After compose has been completed
+
+```
 	- docker exec -it web.1 sh -c 'curl -sS https://getcomposer.org/installer | php'
   	- docker exec -it web.1 sh -c 'mv composer.phar /usr/local/bin/composer && chmod 755 /usr/local/bin/composer'
-  	- docker exec -it web.1 sh -c 'curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony && cd /var/www/vhosts/example1.it && /usr/local/bin/symfony new blog lts'
+  	- docker exec -it web.1 sh -c 'curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony && cd /var/www/vhosts/example1.it && /usr/local/bin/symfony new myapp lts'
 ```
