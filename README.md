@@ -2,12 +2,8 @@
 
 In [Ideato](https://www.ideato.com) we are developing software using OSX so we had to find a solution about no native support for Docker.
 Instead launching one Vagrant machine for each container (using vm.provider : docker) we recommend to host inside a Vagrant machine a fully working Docker Machine hosting our containers.
-<<<<<<< HEAD
 You would wonder why..We can reuse Docker images inside the single Vagrant machine and speed up our environment setup
 Please check http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-together/
-=======
-You would wonder why...We can reuse Docker images inside the single Vagrant machine and speed up our environment setup.
->>>>>>> e71af59290df96c56cb14ce61852bd7f0e5f19db
 
 For this work we inspired from [Scott Lowe blog post](http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-together/)
 
